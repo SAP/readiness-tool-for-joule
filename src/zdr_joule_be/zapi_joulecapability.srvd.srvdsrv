@@ -1,0 +1,34 @@
+@EndUserText.label: 'Joule Capability Service Definition'
+define service ZAPI_JouleCapability {
+  expose ZC_DRJ_Capability             as Capabilities;
+  expose ZR_DRJ_CapabilityScenario     as Scenarios;
+  expose ZR_DRJ_ScenarioApi            as APIs;
+  expose ZR_DRJ_ScenarioTargetMapping  as TargetMappings;
+  expose ZI_DRJ_CapabilityBusinessRole as BusinessRoles;
+  expose ZCE_DRJ_CapabilityHealth      as CapabilityHealth;
+  expose ZCE_DRJ_ScenarioHealth        as ScenarioHealth;
+  expose ZI_DRJ_UserInfo               as Users;
+  expose ZC_DRJ_CapabilityU            as CapabilitiesU;
+  expose ZR_DRJ_CapabilityScenarioU    as ScenariosU;
+  expose ZR_DRJ_ScenarioApiU           as APIsU;
+  expose ZR_DRJ_ScenarioTargetMappingU as TargetMappingsU;
+  expose ZCE_DRJ_CapabilityHealthU     as CapabilityHealthU;
+  expose ZCE_DRJ_ScenarioHealthU       as ScenarioHealthU;
+  expose ZCE_DRJ_OverallJouleHealthU   as OverallJouleHealthU;
+  expose ZCE_DRJ_TMA_TM                as TMTargetMappings;
+  expose ZCE_DRJ_TMA_ROLE              as TMBusinessRoles;
+  expose ZCE_DRJ_TMA_COMP_ROLE         as TMCompositeRoles;
+  expose ZCE_DRJ_APIA_API              as APIAAPIs;
+  expose ZCE_DRJ_APIA_ROLE             as APIARoles;
+  expose ZCE_DRJ_APIA_COMP_ROLE        as APIACompositeRoles;
+  expose ZCE_DRJ_UI5_DEPENDENCY        as UI5Dependencies;
+  expose ZZC_DRJ_IMPORTLOG             as ImportLog;
+  expose ZR_DRJ_UserRole               as UserRoles;
+  expose ZR_DRJ_AllCDMV1Roles          as AllCDMV1Roles;
+  expose ZR_DRJ_AllCDMV2Roles          as AllCDMV2Roles;
+  expose ZC_DRJ_CRA_Analysis           as CustomRoleAnalyses;
+  expose ZC_DRJ_CRA_Role               as CustomRoleAnalysisRoles;
+  expose ZC_DRJ_CRA_Result             as CustomRoleAnalysisResults;
+  expose ZC_DRJ_CRA_Missing            as CustomRoleAnalysisMissing;
+  expose ZI_DRJ_CRA_RoleVH             as CustomRoleValueHelp;
+}

@@ -1,0 +1,18 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZR_DRJ_CRA_ANALYSIS"
+    ],
+    "ASSOCIATED": [
+      "ZC_DRJ_CRA_MISSING",
+      "ZC_DRJ_CRA_RESULT",
+      "ZC_DRJ_CRA_ROLE",
+      "ZI_DRJ_CRA_MISSING",
+      "ZI_DRJ_CRA_RESULT",
+      "ZI_DRJ_CRA_ROLE"
+    ],
+    "BASE": [
+      "ZR_DRJ_CRA_ANALYSIS"
+    ]
+  }
+}

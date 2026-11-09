@@ -1,0 +1,5 @@
+CLASS zzbp_drj_importlog DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zzi_drj_importlog.
+ENDCLASS.
+
+CLASS zzbp_drj_importlog IMPLEMENTATION.
+ENDCLASS.
