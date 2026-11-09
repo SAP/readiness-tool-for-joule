@@ -1,0 +1,2 @@
+{"version":3,"file":"DrJouleMain.controller.js","names":["sap","ui","define","Controller","formatter","extend","onInit"],"sources":["DrJouleMain-dbg.controller.js"],"mappings":"AAAAA,IAAIC,GAAGC,OAAO,CACV,6BACA,8CACD,CAACC,EAAYC,KACZ,aAEA,OAAOD,EAAWE,OAA+
+O,oDAAqD,CAC1ED,UAAWA,EACX,MAAAE,GACA","ignoreList":[]}                                                                                                                                                                                                        

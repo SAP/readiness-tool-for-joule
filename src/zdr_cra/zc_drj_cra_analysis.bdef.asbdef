@@ -1,0 +1,33 @@
+projection;
+strict ( 2 );
+
+define behavior for ZC_DRJ_CRA_Analysis
+alias Analysis
+{
+  use create;
+  use action Analyze;
+  use action AnalyzeBackground;
+  use action UploadRolesFromExcel;
+
+  use association _Roles { create; }
+  use association _Results;
+  use association _Missing;
+}
+
+define behavior for ZC_DRJ_CRA_Role
+alias Role
+{
+  use association _Analysis;
+}
+
+define behavior for ZC_DRJ_CRA_Result
+alias Result
+{
+  use association _Analysis;
+}
+
+define behavior for ZC_DRJ_CRA_Missing
+alias Missing
+{
+  use association _Analysis;
+}

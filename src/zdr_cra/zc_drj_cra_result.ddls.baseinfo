@@ -1,0 +1,14 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZI_DRJ_CRA_RESULT"
+    ],
+    "ASSOCIATED": [
+      "ZC_DRJ_CRA_ANALYSIS",
+      "ZR_DRJ_CRA_ANALYSIS"
+    ],
+    "BASE": [
+      "ZI_DRJ_CRA_RESULT"
+    ]
+  }
+}

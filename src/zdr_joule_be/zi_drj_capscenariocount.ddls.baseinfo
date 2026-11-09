@@ -1,0 +1,7 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZDRJ_CP_SCENARIO"
+    ]
+  }
+}

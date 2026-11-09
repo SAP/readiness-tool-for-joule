@@ -1,0 +1,8 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "/IWFND/I_MED_SIN",
+      "ICFSERVICE"
+    ]
+  }
+}

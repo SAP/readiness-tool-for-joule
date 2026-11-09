@@ -1,0 +1,2 @@
+{"version":3,"file":"LinkHelper.js","names":["sap","ui","define","Log","createSAPNoteLink","sNoteNumber","test","error","Error"],"sources":["LinkHelper-dbg.js"],"mappings":";;;AAGAA,IAAIC,GAAGC,OAAO,CACb,gBACE,SAASC,GACX,MAAO,CACNC,kBAAmB,SAASC,GAC3B,IAA+
+M,QAAQC,KAAKD,GAAc,CAChCF,EAAII,MAAMF,EAAc,mCACxB,MAAM,IAAIG,MAAM,sBACjB,CACA,MAAO,4BAA8BH,CACtC,EAEF","ignoreList":[]}                                                                                                                                        

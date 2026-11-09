@@ -1,0 +1,14 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZR_DRJ_CAPABILITY"
+    ],
+    "ASSOCIATED": [
+      "ZI_DRJ_CAPABILITYBUSINESSROLE",
+      "ZR_DRJ_CAPABILITYSCENARIO"
+    ],
+    "BASE": [
+      "ZR_DRJ_CAPABILITY"
+    ]
+  }
+}

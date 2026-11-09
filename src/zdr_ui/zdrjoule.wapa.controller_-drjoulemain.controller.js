@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller","dr/joule/assistant/drjoule/model/formatter"],(e,r)=>{"use strict";return e.extend("dr.joule.assistant.drjoule.controller.DrJouleMain",{formatter:r,onInit(){}})});                                                
+//# sourceMappingURL=DrJouleMain.controller.js.map                                                                                                                                                                                                             

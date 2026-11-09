@@ -1,0 +1,12 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZDRJ_CRA_HDR"
+    ],
+    "ASSOCIATED": [
+      "ZI_DRJ_CRA_MISSING",
+      "ZI_DRJ_CRA_RESULT",
+      "ZI_DRJ_CRA_ROLE"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_TRAN" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TSTC>
+    <TCODE>ZJOULEINSPECTOR</TCODE>
+    <CINFO>Ag==</CINFO>
+   </TSTC>
+   <TSTCC>
+    <TCODE>ZJOULEINSPECTOR</TCODE>
+   </TSTCC>
+   <TSTCT>
+    <SPRSL>E</SPRSL>
+    <TCODE>ZJOULEINSPECTOR</TCODE>
+    <TTEXT>Joule Inspector</TTEXT>
+   </TSTCT>
+   <TSTCP>
+    <TCODE>ZJOULEINSPECTOR</TCODE>
+    <PARAM>/*/UI2/UIAD_APP UIAD=BFD9105E13F71FD1A1E1FE6DED08C000;</PARAM>
+   </TSTCP>
+   <HEAD>
+    <NAME>ZJOULEINSPECTOR</NAME>
+    <TYPE>TR</TYPE>
+    <DISPLAY_NAME>ZJOULEINSPECTOR</DISPLAY_NAME>
+    <STEXT>Parameter Transaction</STEXT>
+    <OKFLAG>I</OKFLAG>
+    <CTYPE>P</CTYPE>
+   </HEAD>
+   <USOBX>
+    <USOBX>
+     <NAME>ZJOULEINSPECTOR</NAME>
+     <TYPE>TR</TYPE>
+     <OBJECT>!INHERIT</OBJECT>
+     <OKFLAG>N</OKFLAG>
+    </USOBX>
+   </USOBX>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,7 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZZDRJ_IMPORT_LOG"
+    ]
+  }
+}

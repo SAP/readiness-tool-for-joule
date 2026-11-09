@@ -1,0 +1,10 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZDRJ_CRA_MISSING"
+    ],
+    "ASSOCIATED": [
+      "ZR_DRJ_CRA_ANALYSIS"
+    ]
+  }
+}

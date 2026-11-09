@@ -1,0 +1,121 @@
+managed implementation in class zbp_r_drj_cra_analysis unique;
+strict ( 2 );
+
+define behavior for ZR_DRJ_CRA_Analysis
+alias Analysis
+persistent table zdrj_cra_hdr
+lock master
+authorization master ( global )
+with additional save
+{
+
+  create;
+  update;
+
+  determination SetInitialValues on modify { create; }
+
+  action Analyze result [1] $self;
+  action AnalyzeBackground result [1] $self;
+
+  static action UploadRolesFromExcel
+    parameter ZI_DRJ_CRA_ExcelUploadP
+    result [1] ZI_DRJ_CRA_ExcelUploadR;
+
+  field ( numbering : managed, readonly )
+  AnalysisUUID;
+
+  field ( readonly )
+  CreatedBy,
+  CreatedAt,
+  Status,
+  RoleCount,
+  ScenarioCount,
+  ResultCount;
+
+  association _Roles { create; }
+  association _Results { create; }
+  association _Missing { create; }
+
+  mapping for zdrj_cra_hdr
+    {
+      AnalysisUUID  = analysis_uuid;
+      CreatedBy     = created_by;
+      CreatedAt     = created_at;
+      Status        = status;
+      RoleCount     = role_count;
+      ScenarioCount = scenario_count;
+      ResultCount   = result_count;
+    }
+}
+
+
+define behavior for ZI_DRJ_CRA_Role
+alias Role
+persistent table zdrj_cra_role
+lock dependent by _Analysis
+authorization dependent by _Analysis
+{
+  field ( readonly )
+  AnalysisUUID;
+
+  association _Analysis;
+
+  mapping for zdrj_cra_role
+    {
+      AnalysisUUID = analysis_uuid;
+      RoleName     = role_name;
+    }
+}
+
+define behavior for ZI_DRJ_CRA_Result
+alias Result
+persistent table zdrj_cra_result
+lock dependent by _Analysis
+authorization dependent by _Analysis
+{
+  field ( readonly )
+  AnalysisUUID;
+
+  association _Analysis;
+
+  mapping for zdrj_cra_result
+    {
+      AnalysisUUID   = analysis_uuid;
+      RoleName       = role_name;
+      CapabilityName = capability_name;
+      ScenarioName   = scenario_name;
+      Coverage       = coverage;
+      RequiredTM     = required_tm;
+      CoveredTM      = covered_tm;
+      RequiredAPI    = required_api;
+      CoveredAPI     = covered_api;
+    }
+}
+
+
+define behavior for ZI_DRJ_CRA_Missing
+alias Missing
+persistent table zdrj_cra_missing
+lock dependent by _Analysis
+authorization dependent by _Analysis
+{
+  field ( readonly )
+  AnalysisUUID;
+
+  association _Analysis;
+
+  mapping for zdrj_cra_missing
+    {
+      AnalysisUUID     = analysis_uuid;
+      RoleName         = role_name;
+      CapabilityName   = capability_name;
+      ScenarioName     = scenario_name;
+      RequirementType  = requirement_type;
+      RequirementKey   = requirement_key;
+      ODataServiceName = odata_service_name;
+      APIVersion       = api_version;
+      SemanticObject   = semantic_object;
+      SemanticAction   = semantic_action;
+      CatalogID        = catalog_id;
+    }
+}

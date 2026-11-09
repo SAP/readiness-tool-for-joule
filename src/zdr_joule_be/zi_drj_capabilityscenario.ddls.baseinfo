@@ -1,0 +1,14 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZI_DRJ_SCENARIOAPICOUNT",
+      "ZI_DRJ_SCENARIOTMCOUNT",
+      "ZDRJ_CP_SCENARIO"
+    ],
+    "ASSOCIATED": [
+      "ZI_DRJ_SCENARIOTARGETMAPPING",
+      "ZR_DRJ_CAPABILITY",
+      "ZR_DRJ_SCENARIOAPI"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SMIM" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <URL>/SAP/BC/BSP/SAP/ZDRJOULE/images/No_Data_Illustration.png</URL>
+   <CLASS>M_IMAGE_L</CLASS>
+   <EXTRA>
+    <FILE_NAME>No_Data_Illustration.png</FILE_NAME>
+    <MIMETYPE>image/png</MIMETYPE>
+    <DESCRIPTION>No_Data_Illustration.png</DESCRIPTION>
+    <PARENT_FOLDER_ID>42010AEF44071FD1B4DE6AC24883E000</PARENT_FOLDER_ID>
+   </EXTRA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

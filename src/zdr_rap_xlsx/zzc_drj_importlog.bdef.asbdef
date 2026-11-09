@@ -1,0 +1,9 @@
+projection;
+strict ( 2 );
+
+define behavior for ZZC_DRJ_IMPORTLOG alias ImportLog
+{
+  use action import_excel;
+  use action export_excel;
+  use action import_scenarios_excel;
+}

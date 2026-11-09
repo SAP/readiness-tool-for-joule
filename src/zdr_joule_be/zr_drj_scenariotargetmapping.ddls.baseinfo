@@ -1,0 +1,13 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZI_DRJ_SCENARIOTARGETMAPPING"
+    ],
+    "ASSOCIATED": [
+      "ZI_DRJ_CAPABILITYSCENARIO"
+    ],
+    "BASE": [
+      "ZI_DRJ_SCENARIOTARGETMAPPING"
+    ]
+  }
+}

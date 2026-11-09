@@ -1,0 +1,41 @@
+DATE                                              20261028                                          073716
+RELEASE                                           816
+LOADED_AGRS                                       Z_BR_JOULE_INSPECTOR
+AGR_DEFINE                                        100Z_BR_JOULE_INSPECTOR                                        I076271     20261028071049000000000000000I076271     20261028073645000000000000000
+AGR_1250                                          100Z_BR_JOULE_INSPECTOR          000001S_SERVICE __________00    S  O000000
+AGR_1250                                          100Z_BR_JOULE_INSPECTOR          000002S_TABU_DIS__________00    U  O000000
+AGR_1250                                          100Z_BR_JOULE_INSPECTOR          000003S_TABU_NAM__________00    U  O000000
+AGR_1250                                          100Z_BR_JOULE_INSPECTOR          000004S_TCODE   __________00    U  O000000
+AGR_1250                                          100Z_BR_JOULE_INSPECTOR          000005S_USER_AGR__________00    U  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000001S_SERVICE __________00    SRV_NAME  15BCB658C5E0F423FE292A6322831D                                                  S  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000002S_SERVICE __________00    SRV_NAME  8C09C74DE47A351E975BAA79902359                                                  S  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000003S_SERVICE __________00    SRV_TYPE  HT                                                                              S  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000004S_TABU_DIS__________00    ACTVT     03                                                                              U  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000005S_TABU_DIS__________00    DICBERCLS *                                                                               U  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000006S_TABU_NAM__________00    ACTVT     03                                                                              U  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000007S_TABU_NAM__________00    TABLE     *                                                                               U  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000008S_TCODE   __________00    TCD       SICF                                                                            U  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000009S_USER_AGR__________00    ACTVT     03                                                                              U  O000000
+AGR_1251                                          100Z_BR_JOULE_INSPECTOR          000010S_USER_AGR__________00    ACT_GROUP *                                                                               U  O000000
+AGR_TEXTS                                         100Z_BR_JOULE_INSPECTOR          E00000Readiness Inspection and Guidance Tool for Joule Scenarios
+AGR_TEXTS                                         100Z_BR_JOULE_INSPECTOR          E00001This role provides access to the Readiness Inspection and Guidance Tool for
+AGR_TEXTS                                         100Z_BR_JOULE_INSPECTOR          E00002Joule Scenarios through the SAP Fiori launchpad.
+AGR_FLAGS                                         100Z_BR_JOULE_INSPECTOR          COLL_AGR  I076271     20261028071049I076271     20261028071049
+AGR_FLAGS                                         100Z_BR_JOULE_INSPECTOR          DEVCLASS  I076271     20261028071049I076271     20261028071049
+AGR_FLAGS                                         100Z_BR_JOULE_INSPECTOR          MASTER_LANI076271     20261028071049I076271     20261028071049E
+AGR_FLAGS                                         100Z_BR_JOULE_INSPECTOR          RESP_USER I076271     20261028071049I076271     20261028071049
+AGR_BUFFI                                         100Z_BR_JOULE_INSPECTOR          00000002WX-SAP-UI2-CATALOGPAGE:ZBC_JOULE_INSPECTOR_PLUGIN?AUTH_DEFAULTS=X&DEST_FES=
+AGR_BUFFI                                         100Z_BR_JOULE_INSPECTOR          00000003WOTSERVICE             8C09C74DE47A351E975BAA79902359HT
+AGR_BUFFI                                         100Z_BR_JOULE_INSPECTOR          00000004WOTSERVICE             15BCB658C5E0F423FE292A6322831DHT
+AGR_HIER                                          100Z_BR_JOULE_INSPECTOR          0000000200000001X00000010OTCAT_PROVIDER                                    01                                X                                         0000000000
+AGR_HIER                                          100Z_BR_JOULE_INSPECTOR          0000000300000001 00000020OTSERVICE                                         01                                X                                         0000000000
+AGR_HIER                                          100Z_BR_JOULE_INSPECTOR          0000000400000001 00000030OTSERVICE                                         01                                X                                         0000000000
+AGR_HIERT                                         100Z_BR_JOULE_INSPECTOR          E00000002Readiness Inspection and Guidance Tool for Joule Scenarios
+AGR_HIERT                                         100Z_BR_JOULE_INSPECTOR          E00000003R3TR IWSV ZAPI_JOULECAPABILITY_O2            0001
+AGR_HIERT                                         100Z_BR_JOULE_INSPECTOR          E00000004R3TR IWSG ZAPI_JOULECAPABILITY_O2_0001
+AGR_APPL_VARS                                     100Z_BR_JOULE_INSPECTOR          HT15BCB658C5E0F423FE292A6322831DX
+AGR_APPL_VARS                                     100Z_BR_JOULE_INSPECTOR          HT8C09C74DE47A351E975BAA79902359X
+AGR_TIME                                          100Z_BR_JOULE_INSPECTOR          MENU      I076271     20261028072618000000000000000I076271     20261028072618000000000000000
+AGR_TIME                                          100Z_BR_JOULE_INSPECTOR          VARIANTS  I076271     20261028072618000000000000000I076271     20261028072618000000000000000
+AGR_TIME                                          100Z_BR_JOULE_INSPECTOR          PROFILE   I076271     20261028073517000000000000000I076271     20261028073517000000000000000
+AGR_LSD                                           100Z_BR_JOULE_INSPECTOR                                        E
