@@ -1,0 +1,10 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZDRJ_CAP_BROLE"
+    ],
+    "ASSOCIATED": [
+      "ZR_DRJ_CAPABILITY"
+    ]
+  }
+}

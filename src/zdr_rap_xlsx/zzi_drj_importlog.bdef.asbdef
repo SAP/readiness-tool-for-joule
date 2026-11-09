@@ -1,0 +1,32 @@
+managed implementation in class ZZBP_DRJ_IMPORTLOG unique;
+strict ( 2 );
+
+define behavior for ZZI_DRJ_IMPORTLOG alias ImportLog
+persistent table zzdrj_import_log
+lock master
+authorization master ( global )
+{
+  field ( readonly ) ImportUuid;
+
+  mapping for zzdrj_import_log corresponding
+    {
+      ImportUuid       = import_uuid;
+      ImportTs         = import_ts;
+      ImportedBy       = imported_by;
+      FileName         = file_name;
+      RowsInFile       = rows_in_file;
+      CapsCreated      = caps_created;
+      ScenariosCreated = scenarios_created;
+      Status           = status;
+      Message          = message;
+    }
+
+  static action import_excel
+    parameter ZZIF_DRJ_IMPORT_PARAM;
+
+  static action export_excel
+    result [1] ZZIF_DRJ_EXPORT_RESULT;
+
+  static action import_scenarios_excel
+    parameter ZZIF_DRJ_IMPORT_PARAM;
+}

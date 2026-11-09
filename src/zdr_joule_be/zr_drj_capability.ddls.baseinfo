@@ -1,0 +1,14 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZI_DRJ_CAPAPICOUNT",
+      "ZI_DRJ_CAPSCENARIOCOUNT",
+      "ZI_DRJ_CAPTMCOUNT",
+      "ZDRJ_CAPABILITY"
+    ],
+    "ASSOCIATED": [
+      "ZI_DRJ_CAPABILITYBUSINESSROLE",
+      "ZR_DRJ_CAPABILITYSCENARIO"
+    ]
+  }
+}

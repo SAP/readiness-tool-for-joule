@@ -1,0 +1,3 @@
+{"version":3,"file":"LogUserHelper.js","names":["sap","ui","define","Object","instance","LogUserHelper","extend","constructor","this","user","setLogUser","sLogUser","getLogUser","getInstance","destroy"],"sources":["LogUserHelper-dbg.js"],"mappings":";;;A+
+AGAA,IAAIC,GAAGC,OAAO,CACb,sBACE,SAAUC,GACZ,IAAIC,EACJ,IAAIC,EAAgBF,EAAOG,OAAO,kDAAmD,CAIpFC,YAAa,WAGZC,KAAKC,KAAO,UACb,EAKAC,WAAY,SAASC,GACpBH,KAAKC,KAAOE,CACb,EAKAC,WAAY,WACX,OAAOJ,KAAKC,IACb,IAGD,MAAO,CACNI,YAAa,WACZ,IAAKT,EAAU,CACdA,EAAW,IAAIC,CAChB,+
+CACA,OAAOD,CACR,EACAU,QAAS,WACT,GAAIV,EAAU,CACZA,EAAW,IACZ,CACD,EAEF","ignoreList":[]}                                                                                                                                                                         

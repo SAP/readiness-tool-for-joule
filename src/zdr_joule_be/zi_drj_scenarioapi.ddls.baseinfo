@@ -1,0 +1,10 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZDRJ_SCEN_API"
+    ],
+    "ASSOCIATED": [
+      "ZI_DRJ_CAPABILITYSCENARIO"
+    ]
+  }
+}
