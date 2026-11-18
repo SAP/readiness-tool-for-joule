@@ -77,7 +77,7 @@ This is an **investigation workflow**, not an automatic fix: activation and role
 | I want to… | Read |
 | --- | --- |
 | Understand the tool and terminology | [Overview](docs/overview.md) |
-| Check compatibility and deploy to a development system | [Installation](docs/installation.md) |
+| Check compatibility and deploy to a development system | [Installation](docs/installation.md) — includes video walkthroughs |
 | Explore individual screens | [Features](docs/features.md) |
 | Find an issue affecting a user | [Common workflows](docs/workflows.md) |
 | Understand role matches and security limits | [Authorisation analysis](docs/authorisation.md) |

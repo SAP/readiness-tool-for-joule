@@ -9,8 +9,8 @@ Welcome to the documentation for the **Readiness Inspection and Guidance Tool fo
 | [🔄 Workflows](workflows.md) | Common investigation and maintenance journeys |
 | [🔐 Authorisation analysis](authorisation.md) | TMA, APIA, CRA, role-match guidance and limits |
 | [🔁 Data synchronisation](data-sync.md) | SAP Note and Joule Admin Center data |
-| [🛠️ Installation](installation.md) | Development-system deployment with abapGit |
-| [🔧 Troubleshooting](troubleshooting.md) | Common observed issues and what to check |
+| [🛠️ Installation](installation.md) | Development-system deployment with abapGit — includes video walkthroughs |
+| [🔧 Troubleshooting](troubleshooting.md) | Common observed issues and what to check — includes SSL certificate walkthrough videos |
 | [⚠️ Scope and limitations](limitations.md) | What the tool does and does not establish |
 | [🏗️ Architecture](architecture.md) | Conceptual component/data-flow view; implementation details pending verification |
 | [📝 Source notes](source-notes.md) | PDF-to-Markdown traceability |
