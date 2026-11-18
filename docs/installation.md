@@ -27,6 +27,17 @@ In ADT/Eclipse, create a new **ABAP Package** (Ctrl+Shift+N):
 
 Check that the package has type **Structure**, not an ordinary development package.
 
+<details>
+<summary>▶ Watch demonstration: Create ABAP Package in ADT (28 seconds)</summary>
+
+![Create ABAP Package in ADT](../assets/videos/installation/01-create-abap-package-in-adt.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/installation/01-create-abap-package-in-adt.mp4)
+
+[Open dedicated demonstration page](videos/01-create-abap-package-in-adt.md)
+
+</details>
+
 ## 2. Register the repository in abapGit
 
 1. Run `ZABAPGIT_STANDALONE` using `SE38` or `SA38`.
@@ -47,9 +58,46 @@ Check that the package has type **Structure**, not an ordinary development packa
 
 The guide notes that an error relating to this service binding may appear immediately after the import; this is expected before the manual activation step.
 
+<details>
+<summary>▶ Watch demonstration: Create Online Repository in abapGit (28 seconds, covers steps 1–4)</summary>
+
+![Create Online Repository in abapGit](../assets/videos/installation/02-create-online-repository-in-abapgit.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/installation/02-create-online-repository-in-abapgit.mp4)
+
+[Open dedicated demonstration page](videos/02-create-online-repository-in-abapgit.md)
+
+</details>
+
+<details>
+<summary>▶ Watch demonstration: Pull and Activate ABAP Objects (58 seconds, covers steps 5–6)</summary>
+
+![Pull and Activate ABAP Objects](../assets/videos/installation/03-pull-and-activate-abap-objects.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/installation/03-pull-and-activate-abap-objects.mp4)
+
+[Open dedicated demonstration page](videos/03-pull-and-activate-abap-objects.md)
+
+</details>
+
 ### TLS / certificate errors
 
-If the connection fails because the remote certificate is not trusted, the guide directs the administrator to obtain the proper certificate through their IT team and maintain the trust in `STRUST`. **Do not disable certificate verification** as a workaround.
+If the connection fails because the remote certificate is not trusted, the guide directs the administrator to obtain the proper certificate through their IT team and maintain the trust in `STRUST`. **Do not disable certificate verification** as a workaround. See [Troubleshooting: HTTPS connection errors](troubleshooting.md#abapgit-cannot-establish-a-trusted-https-connection) for step-by-step video walkthroughs of the certificate export and STRUST import process.
+
+### Add package to ADT Favourites (optional)
+
+To add `ZDR_JOULE` to the ADT Favourites view for easier navigation, right-click the package in ABAP Development Tools and select **Add to Favourites**.
+
+<details>
+<summary>▶ Watch demonstration: Add Package to ADT Favourites (31 seconds, optional)</summary>
+
+![Add Package to ADT Favourites](../assets/videos/installation/04-add-package-to-favorites-optional.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/installation/04-add-package-to-favorites-optional.mp4)
+
+[Open dedicated demonstration page](videos/04-add-package-to-favorites-optional.md)
+
+</details>
 
 ## 3. Activate the OData service artefacts
 
@@ -65,6 +113,28 @@ Using **ABAP Development Tools (ADT)**:
 
 The guide notes that minor differences for `SMIM` objects can remain without affecting functionality. Treat any other errors as requiring review; do not automatically dismiss them.
 
+<details>
+<summary>▶ Watch demonstration: Activate OData Service in ADT (37 seconds)</summary>
+
+![Activate OData Service in ADT](../assets/videos/installation/05-activate-odata-service-in-adt.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/installation/05-activate-odata-service-in-adt.mp4)
+
+[Open dedicated demonstration page](videos/05-activate-odata-service-in-adt.md)
+
+</details>
+
+<details>
+<summary>▶ Watch demonstration: Verify Repository Status in abapGit (16 seconds)</summary>
+
+![Verify Repository Status in abapGit](../assets/videos/installation/06-verify-repository-status-in-abapgit.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/installation/06-verify-repository-status-in-abapgit.mp4)
+
+[Open dedicated demonstration page](videos/06-verify-repository-status-in-abapgit.md)
+
+</details>
+
 ## 4. Import and assign the PFCG role
 
 1. Obtain **`Z_BR_JOULE_INSPECTOR.SAP`**, the role export named in the installation guide, from the approved repository release.
@@ -74,6 +144,28 @@ The guide notes that minor differences for `SMIM` objects can remain without aff
 5. In **User**, assign the role to the intended test users and save.
 6. If required, run **User Comparison** to synchronise the user master records.
 7. Sign in to the SAP Fiori Launchpad and confirm the tool appears in the shell bar for authorised users.
+
+<details>
+<summary>▶ Watch demonstration: Download Authorisation Role from GitHub (18 seconds, covers step 1)</summary>
+
+![Download Authorisation Role from GitHub](../assets/videos/installation/07-download-authorization-role-from-github.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/installation/07-download-authorization-role-from-github.mp4)
+
+[Open dedicated demonstration page](videos/07-download-authorization-role-from-github.md)
+
+</details>
+
+<details>
+<summary>▶ Watch demonstration: Import and Assign Authorisation Role (1 minute 2 seconds, covers steps 2–7)</summary>
+
+![Import and Assign Authorisation Role](../assets/videos/installation/08-import-and-assign-authorization-role.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/installation/08-import-and-assign-authorization-role.mp4)
+
+[Open dedicated demonstration page](videos/08-import-and-assign-authorization-role.md)
+
+</details>
 
 ## ✅ Installation verification
 

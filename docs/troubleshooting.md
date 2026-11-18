@@ -26,6 +26,41 @@ The installation guide expects a temporary error during import for **`ZAPI_JOULE
 
 Follow your organisation's certificate-management process and configure the required trust in transaction **STRUST**. Avoid bypassing TLS validation.
 
+The following demonstrations walk through one example of this process. The certificate chain shown is specific to the recorded environment — verify the correct certificates and trust configuration for your SAP landscape with your IT and security team before following these steps.
+
+<details>
+<summary>▶ Watch: Recognising the GitHub SSL Connection Error (20 seconds)</summary>
+
+![Recognising the GitHub SSL Connection Error](../assets/videos/troubleshooting/troubleshooting-github-ssl-connection-error.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/troubleshooting/troubleshooting-github-ssl-connection-error.mp4)
+
+[Open dedicated demonstration page](videos/troubleshooting-github-ssl-connection-error.md)
+
+</details>
+
+<details>
+<summary>▶ Watch: Exporting the GitHub CA Certificates from the Browser (40 seconds)</summary>
+
+![Exporting the GitHub CA Certificates from the Browser](../assets/videos/troubleshooting/troubleshooting-export-github-ssl-certificates.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/troubleshooting/troubleshooting-export-github-ssl-certificates.mp4)
+
+[Open dedicated demonstration page](videos/troubleshooting-export-github-ssl-certificates.md)
+
+</details>
+
+<details>
+<summary>▶ Watch: Importing the Certificates into STRUST (1 minute 1 second)</summary>
+
+![Importing the Certificates into STRUST](../assets/videos/troubleshooting/troubleshooting-import-ssl-certificates-in-strust.webp)
+
+[Download full-quality demonstration (MP4)](../assets/videos/troubleshooting/troubleshooting-import-ssl-certificates-in-strust.mp4)
+
+[Open dedicated demonstration page](videos/troubleshooting-import-ssl-certificates-in-strust.md)
+
+</details>
+
 ## CRA background analysis cannot run
 
 Background mode is experimental and documented only as tested on **S/4HANA 2025** with properly configured **bgPF**, **bgRFC**, an active BGPF inbound destination and `BGMC_DEFAULT`. Use **Standard** mode if prerequisites are not in place.
