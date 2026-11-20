@@ -1,5 +1,5 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'Joule Capability Consumption - User Context'
+@EndUserText.label: 'Joule Capability - User Context'
 
 define root view entity ZC_DRJ_CapabilityU
   with parameters

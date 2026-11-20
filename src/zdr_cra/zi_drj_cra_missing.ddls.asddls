@@ -8,12 +8,16 @@ define view entity ZI_DRJ_CRA_Missing
     on $projection.AnalysisUUID = _Analysis.AnalysisUUID
 
 {
+
   key analysis_uuid    as AnalysisUUID,
-  key role_name        as RoleName,
-  key capability_name  as CapabilityName,
-  key scenario_name    as ScenarioName,
-  key requirement_type as RequirementType,
-  key requirement_key  as RequirementKey,
+  key row_hash         as RowHash,
+
+      role_name        as RoleName,
+      capability_name  as CapabilityName,
+      scenario_name    as ScenarioName,
+      requirement_type as RequirementType,
+      requirement_key  as RequirementKey,
+
 
       odata_service_name as ODataServiceName,
       api_version        as APIVersion,

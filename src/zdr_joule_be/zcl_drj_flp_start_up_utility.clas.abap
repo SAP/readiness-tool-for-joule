@@ -126,7 +126,7 @@ CLASS zcl_drj_flp_start_up_utility DEFINITION
       ty_tm  TYPE /ui2/if_tm_index_access=>tp_s_tm_int,
       tty_tm TYPE /ui2/if_tm_index_access=>tp_t_tm_int.
 
-    TYPES tt_role_name TYPE /ui2/cl_pfcg_utils=>tt_role_name.
+    TYPES tt_role_name TYPE /ui2/cl_pfcg_utils=>tt_roles.
 
     TYPES:
       BEGIN OF ty_intent_cat,
@@ -748,6 +748,7 @@ CLASS zcl_drj_flp_start_up_utility IMPLEMENTATION.
     DATA lt_seen TYPE HASHED TABLE OF ty_seen
       WITH UNIQUE KEY dedupe_key.
 
+    DATA lv_fallback_key TYPE string.
 *--------------------------------------------------------------------
 * Build catalog lookup
 *--------------------------------------------------------------------
@@ -774,13 +775,50 @@ CLASS zcl_drj_flp_start_up_utility IMPLEMENTATION.
 *------------------------------------------------------------------
       WHILE lv_catalog IS NOT INITIAL.
 
+
         READ TABLE lt_catalogs
           ASSIGNING FIELD-SYMBOL(<ls_cat>)
           WITH TABLE KEY catalog_id = lv_catalog.
 
         IF sy-subrc <> 0.
+
+          " Parent TM is not included in the supplied table.
+          " Keep one representative for each referenced TM identity.
+          CLEAR lv_fallback_key.
+
+          IF <ls_source>-ref_chip_id IS NOT INITIAL.
+
+            lv_fallback_key =
+              |REF:{ <ls_source>-ref_catalog_id }/{ <ls_source>-ref_chip_id }|.
+
+          ELSEIF <ls_source>-chip_id IS NOT INITIAL.
+
+            lv_fallback_key = |CHIP:{ <ls_source>-chip_id }|.
+
+          ELSE.
+
+            lv_fallback_key = |MAP:{ <ls_source>-mapping_id }|.
+
+          ENDIF.
+
+          READ TABLE lt_seen
+            WITH TABLE KEY dedupe_key = lv_fallback_key
+            TRANSPORTING NO FIELDS.
+
+          IF sy-subrc <> 0.
+
+            INSERT VALUE ty_seen(
+              dedupe_key = lv_fallback_key )
+              INTO TABLE lt_seen.
+
+            INSERT <ls_source> INTO TABLE rt_tm.
+
+          ENDIF.
+
           EXIT.
+
         ENDIF.
+
 
 *------------------------------------------------------------------
 * Broken self-reference protection
@@ -811,17 +849,20 @@ CLASS zcl_drj_flp_start_up_utility IMPLEMENTATION.
 *----------------------------------------------------------------
           DATA lv_key TYPE string.
 
-          IF <ls_root_tm>-uiad_id IS NOT INITIAL.
+          " Default to MAPPING_ID (available in 2023 and 2025)
+          lv_key = |MAP:{ CONV string( <ls_root_tm>-mapping_id ) }|.
 
-            lv_key =
-              |UIAD:{ CONV string( <ls_root_tm>-uiad_id ) }|.
+          " UIAD_ID is only available in newer releases
+          ASSIGN COMPONENT 'UIAD_ID'
+            OF STRUCTURE <ls_root_tm>
+            TO FIELD-SYMBOL(<lv_uiad_id>).
 
-          ELSE.
-
-            lv_key =
-              |MAP:{ CONV string( <ls_root_tm>-mapping_id ) }|.
-
+          IF sy-subrc = 0.
+            IF <lv_uiad_id> IS NOT INITIAL.
+              lv_key = |UIAD:{ CONV string( <lv_uiad_id> ) }|.
+            ENDIF.
           ENDIF.
+
 
 *----------------------------------------------------------------
 * Already added?
@@ -1321,9 +1362,23 @@ CLASS zcl_drj_flp_start_up_utility IMPLEMENTATION.
 *--------------------------------------------------------------------
 * Convert SAP internal TM structure into our explicit detailed structure
 *--------------------------------------------------------------------
+
     CLEAR rt_tm_info.
 
+    DATA lv_uiad_id TYPE /ui2/ad_mm_app_id.
+
     LOOP AT lt_tm ASSIGNING FIELD-SYMBOL(<ls_tm>).
+
+      CLEAR lv_uiad_id.
+
+      ASSIGN COMPONENT 'UIAD_ID'
+        OF STRUCTURE <ls_tm>
+        TO FIELD-SYMBOL(<lv_tm_uiad_id>).
+
+      IF sy-subrc = 0.
+        lv_uiad_id = <lv_tm_uiad_id>.
+      ENDIF.
+
 
       APPEND VALUE tp_s_tm_detailed_info(
         object           = CONV string( <ls_tm>-object )
@@ -1342,7 +1397,7 @@ CLASS zcl_drj_flp_start_up_utility IMPLEMENTATION.
         ref_catalog_id   = CONV string( <ls_tm>-ref_catalog_id )
         ref_scope        = <ls_tm>-ref_scope
         properties       = <ls_tm>-properties
-        uiad_id          = <ls_tm>-uiad_id )
+        uiad_id          = lv_uiad_id )
         TO rt_tm_info.
 
     ENDLOOP.
@@ -1561,11 +1616,10 @@ CLASS zcl_drj_flp_start_up_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_roles_of_user.
 
-*--------------------------------------------------------------------
-* Resolve user
-*--------------------------------------------------------------------
+    " Resolve requested user
     DATA(lv_user) =
       COND syuname(
         WHEN iv_user IS NOT INITIAL
@@ -1574,22 +1628,44 @@ CLASS zcl_drj_flp_start_up_utility IMPLEMENTATION.
 
     TRANSLATE lv_user TO UPPER CASE.
 
-*--------------------------------------------------------------------
-* Read effective PFCG roles
-*--------------------------------------------------------------------
-    rt_role_name =
-      /ui2/cl_pfcg_utils=>get_roles_of_user(
-        iv_user = lv_user ).
+    " Same role-list structure used by SAP standard
+    TYPES:
+      BEGIN OF ty_role_list,
+        agr_name   TYPE agr_define-agr_name,
+        parent_agr TYPE agr_define-parent_agr,
+        target_sys TYPE agr_hier-target_sys,
+        cust_flag  TYPE char01,
+        col_flag   TYPE char01,
+      END OF ty_role_list.
 
-*--------------------------------------------------------------------
-* Return each role only once
-*--------------------------------------------------------------------
+    DATA:
+      lt_role_list    TYPE STANDARD TABLE OF ty_role_list,
+      lt_sgls_in_cols TYPE STANDARD TABLE OF ty_role_list,
+      lv_add_spro     TYPE agr_name.
+
+    " Underlying SAP role-selection routine
+    PERFORM select_roles_of_one_user
+      IN PROGRAM saplsmtr_navigation_modules
+      USING lv_user
+            'N'
+      CHANGING lt_role_list[]
+               lt_sgls_in_cols[]
+               lv_add_spro.
+
+    " Return distinct role names
+    CLEAR rt_role_name.
+
+    LOOP AT lt_role_list INTO DATA(ls_role).
+      APPEND ls_role-agr_name TO rt_role_name.
+    ENDLOOP.
+
     SORT rt_role_name BY table_line.
 
     DELETE ADJACENT DUPLICATES FROM rt_role_name
       COMPARING table_line.
 
   ENDMETHOD.
+
 
   METHOD get_fiori_roles_of_user.
 

@@ -1,4 +1,4 @@
-# 🔐 Authorisation analysis
+# Authorisation analysis
 
 This tool helps identify missing **basic prerequisite authorisations** for Joule scenarios. All assignments and changes to PFCG roles remain administrator actions in the target landscape.
 
@@ -44,7 +44,7 @@ CRA checks whether one or more selected business roles provide basic authorisati
 | Partially covered | Some but not all requirements are covered |
 | Not Covered | The role does not meet the required coverage |
 
-**Background mode is experimental.** The user guide states it has only been tested/validated with **SAP S/4HANA 2025**, and requires configured **bgPF**, **bgRFC**, an active BGPF inbound destination and `BGMC_DEFAULT` context. Use Standard mode if these prerequisites are missing.
+**Background mode is experimental.** The user guide states it has only been tested/validated with **SAP S/4HANA 2023**, and requires configured **bgPF**, **bgRFC**, an active BGPF inbound destination and `BGMC_DEFAULT` context. Use Standard mode if these prerequisites are missing.
 
 **Critical limitation:** CRA does **not** check functional, business, organisational, application-specific or data-level authorisations and does not certify that a user can successfully complete a business process.
 
@@ -52,7 +52,7 @@ CRA checks whether one or more selected business roles provide basic authorisati
 
 *The matrix screenshot shows coverage results, not the separate missing-requirements detail popover. Select a cell in the application to inspect missing requirements.*
 
-## ⚠️ Interpreting recommendations
+## Interpreting recommendations
 
 - Start with inactive artefacts; red health status takes precedence over warning status.
 - For activation gaps, consult [Troubleshooting](troubleshooting.md) and the SAP activation procedures suggested by the tool.

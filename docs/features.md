@@ -1,12 +1,10 @@
-# ✨ Feature guide
+# Feature guide
 
 This page introduces the screens at a level suitable for repository readers. For operational step-by-step procedures, use the [workflows](workflows.md) and [authorisation guide](authorisation.md).
 
 ## 1. Capabilities Overview
 
 The landing page presents an overall health donut, top healthy capabilities, and a searchable/filterable capability list. Each row can open its scenarios; the information action gives a more detailed capability breakdown. The toolbar provides access to user switching, role comparison, CRA, the Prompt Library, data synchronisation and Admin Center import.
-
-Each capability and scenario is assigned a tool-generated reference ID — for example `CAP-001` or `SCEN-0076` — used for internal handling and display. These IDs are not SAP Joule technical identifiers.
 
 ![Capabilities Overview showing a capability health donut, top healthy capabilities and filters](../assets/images/capabilities-overview.png)
 
@@ -15,6 +13,8 @@ Each capability and scenario is assigned a tool-generated reference ID — for e
 ## 2. Scenarios Overview
 
 Selecting a capability shows its scenarios, scenario health counts and API/IBN activation information. Selecting a scenario opens its detail page.
+
+> **Image slot · IMG-04 — Scenarios Overview.** [Specification](image-plan.md#img-04).
 
 ## 3. Individual Scenario Detail
 
@@ -29,6 +29,8 @@ From this screen, users can open the **Target Mapping Role Analyser**, **API Aut
 ## 4. Context-user simulation
 
 Administrators can select another user from the Capabilities Overview, after which the tool displays results in that user's context. A banner identifies the active simulation. Simulation is **read-only** and does not change customer-system settings. Return to the overview to switch users or cancel.
+
+> **Image slot · IMG-06 — Switch User / simulation banner.** [Specification](image-plan.md#img-06).
 
 ## 5. Target Mapping Role Analyser (TMA)
 
@@ -64,6 +66,8 @@ The guide helps administrators perform fixes; it does not automatically activate
 
 CRA evaluates selected business roles against Joule scenarios, then presents results as a coverage matrix. Role inputs can be selected by name or imported from Excel; analysis runs in standard mode or experimental background mode on supported/configured systems.
 
+> **Image slot · IMG-10 — CRA input screen.** [Specification](image-plan.md#img-10).
+
 ![Custom Role Analyser result with a role-by-scenario matrix and overall covered, partially covered and not covered counts](../assets/images/role-coverage-matrix.png)
 
 *CRA coverage matrix — summary counts cover all analysed combinations; the visible matrix cells show uncovered examples.*
@@ -74,9 +78,15 @@ CRA reports **Covered**, **Partially covered** and **Not Covered** for basic IBN
 
 The capability mapping from **SAP Note 3523238** can be uploaded/exported through **Capability Data Sync**. Separately, **Joule Admin Center scenario visibility data** can be imported. They represent different purposes and are **not interchangeable**. [More detail](data-sync.md).
 
+> **Image slot · IMG-12 — Capability Data Sync.** [Specification](image-plan.md#img-12).
+>
+> **Image slot · IMG-13 — Admin Center data import.** [Specification](image-plan.md#img-13).
+
 ## 11. Joule Prompt Library
 
 A tree of published Joule use-case prompts supports sending a prompt as-is or editing it first. The manual advises checking licensing and consumption before productive use.
+
+> **Image slot · IMG-14 — Prompt Library.** [Specification](image-plan.md#img-14).
 
 ## 12. Role Federation Comparison
 

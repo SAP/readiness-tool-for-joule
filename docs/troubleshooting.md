@@ -1,4 +1,4 @@
-# 🔧 Troubleshooting
+# Troubleshooting
 
 The tool provides **diagnostic guidance**. It does not automatically activate services, generate missing business catalogues or assign roles in the underlying SAP system.
 
@@ -26,50 +26,15 @@ The installation guide expects a temporary error during import for **`ZAPI_JOULE
 
 Follow your organisation's certificate-management process and configure the required trust in transaction **STRUST**. Avoid bypassing TLS validation.
 
-The following demonstrations walk through one example of this process. The certificate chain shown is specific to the recorded environment — verify the correct certificates and trust configuration for your SAP landscape with your IT and security team before following these steps.
-
-<details>
-<summary>▶ Watch: Recognising the GitHub SSL Connection Error (20 seconds)</summary>
-
-![Recognising the GitHub SSL Connection Error](../assets/videos/troubleshooting/troubleshooting-github-ssl-connection-error.webp)
-
-[Download full-quality demonstration (MP4)](../assets/videos/troubleshooting/troubleshooting-github-ssl-connection-error.mp4)
-
-[Open dedicated demonstration page](videos/troubleshooting-github-ssl-connection-error.md)
-
-</details>
-
-<details>
-<summary>▶ Watch: Exporting the GitHub CA Certificates from the Browser (40 seconds)</summary>
-
-![Exporting the GitHub CA Certificates from the Browser](../assets/videos/troubleshooting/troubleshooting-export-github-ssl-certificates.webp)
-
-[Download full-quality demonstration (MP4)](../assets/videos/troubleshooting/troubleshooting-export-github-ssl-certificates.mp4)
-
-[Open dedicated demonstration page](videos/troubleshooting-export-github-ssl-certificates.md)
-
-</details>
-
-<details>
-<summary>▶ Watch: Importing the Certificates into STRUST (1 minute 1 second)</summary>
-
-![Importing the Certificates into STRUST](../assets/videos/troubleshooting/troubleshooting-import-ssl-certificates-in-strust.webp)
-
-[Download full-quality demonstration (MP4)](../assets/videos/troubleshooting/troubleshooting-import-ssl-certificates-in-strust.mp4)
-
-[Open dedicated demonstration page](videos/troubleshooting-import-ssl-certificates-in-strust.md)
-
-</details>
-
 ## CRA background analysis cannot run
 
-Background mode is experimental and documented only as tested on **S/4HANA 2025** with properly configured **bgPF**, **bgRFC**, an active BGPF inbound destination and `BGMC_DEFAULT`. Use **Standard** mode if prerequisites are not in place.
+Background mode is experimental and documented only as tested on **S/4HANA 2023** with properly configured **bgPF**, **bgRFC**, an active BGPF inbound destination and `BGMC_DEFAULT`. Use **Standard** mode if prerequisites are not in place.
 
 ## Reference-data import shows errors
 
 Open **Import History → View Logs** and inspect records for unsupported or unrecognised values. Confirm that the Excel file is from the intended source: SAP Note **3523238** for capability mappings, or Joule Admin Center for visibility conditions.
 
-## 🔍 Useful diagnostic sequence
+## Useful diagnostic sequence
 
 1. Is the **Joule plug-in initialised** in the FLP?
 2. Is the **capability** available and healthy?

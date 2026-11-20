@@ -7,7 +7,6 @@ lock master
 authorization master ( global )
 {
   field ( readonly ) ImportUuid;
-
   mapping for zzdrj_import_log corresponding
     {
       ImportUuid       = import_uuid;

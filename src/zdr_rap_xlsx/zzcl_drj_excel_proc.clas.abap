@@ -66,12 +66,6 @@ CLASS zzcl_drj_excel_proc IMPLEMENTATION.
     DATA(lt_rows) = read_excel( iv_xstring ).
     ev_rows = lines( lt_rows ).
 
-    DELETE FROM zdrj_capability.
-    DELETE FROM zdrj_cap_brole.
-    DELETE FROM zdrj_cp_scenario.
-    DELETE FROM zdrj_scen_api.
-    DELETE FROM zdrj_scen_tm.
-
     build_and_insert(
       EXPORTING it_rows      = lt_rows
       IMPORTING ev_caps      = ev_caps
@@ -858,11 +852,78 @@ CLASS zzcl_drj_excel_proc IMPLEMENTATION.
         semantic_action
         catalog_id.
 
-    INSERT zdrj_capability FROM TABLE @lt_caps.
-    INSERT zdrj_cap_brole  FROM TABLE @lt_roles.
-    INSERT zdrj_cp_scenario    FROM TABLE @lt_scens.
-    INSERT zdrj_scen_api   FROM TABLE @lt_apis.
-    INSERT zdrj_scen_tm    FROM TABLE @lt_tms.
+
+    "------------------------------------------------------------
+    " 1. Validate prepared data before replacing DB records
+    "------------------------------------------------------------
+    IF it_rows IS INITIAL
+       OR lt_caps IS INITIAL
+       OR lt_scens IS INITIAL.
+
+      APPEND 'No valid reference data prepared. Existing data preserved.'
+        TO ev_warnings.
+      RETURN.
+
+    ENDIF.
+
+    "------------------------------------------------------------
+    " 2. Generate ROW_HASH for APIs and Target Mappings
+    "------------------------------------------------------------
+    TRY.
+
+        LOOP AT lt_apis ASSIGNING FIELD-SYMBOL(<ls_api_hash>).
+
+          <ls_api_hash>-row_hash =
+            zcl_drj_row_key=>for_scen_api(
+              <ls_api_hash> ).
+
+        ENDLOOP.
+
+        LOOP AT lt_tms ASSIGNING FIELD-SYMBOL(<ls_tm_hash>).
+
+          <ls_tm_hash>-row_hash =
+            zcl_drj_row_key=>for_scen_tm(
+              <ls_tm_hash> ).
+
+        ENDLOOP.
+
+      CATCH cx_abap_message_digest INTO DATA(lx_hash).
+
+        APPEND |ROW_HASH generation failed: { lx_hash->get_text( ) }|
+          TO ev_warnings.
+
+        RETURN.
+
+    ENDTRY.
+
+    "------------------------------------------------------------
+    " 3. Delete existing reference data
+    " Only after successful preparation and hashing
+    "------------------------------------------------------------
+    DELETE FROM zdrj_scen_tm.
+    DELETE FROM zdrj_scen_api.
+    DELETE FROM zdrj_cp_scenario.
+    DELETE FROM zdrj_cap_brole.
+    DELETE FROM zdrj_capability.
+
+    "------------------------------------------------------------
+    " 4. Insert prepared replacement data
+    "------------------------------------------------------------
+    INSERT zdrj_capability
+      FROM TABLE @lt_caps.
+
+    INSERT zdrj_cap_brole
+      FROM TABLE @lt_roles.
+
+    INSERT zdrj_cp_scenario
+      FROM TABLE @lt_scens.
+
+    INSERT zdrj_scen_api
+      FROM TABLE @lt_apis.
+
+    INSERT zdrj_scen_tm
+      FROM TABLE @lt_tms.
+
   ENDMETHOD.
 
 ENDCLASS.

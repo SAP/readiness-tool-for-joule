@@ -1,4 +1,4 @@
-# 🔄 Common workflows
+# Common workflows
 
 These workflows correspond to the journeys in the User Guide & Feature Reference. They describe what to investigate, not automated changes made by the plug-in.
 
@@ -33,6 +33,8 @@ flowchart TD
 5. Return to the overview and choose **Cancel Simulation** to revert.
 
 Context simulation is **read-only**; it does not assign roles or change user settings.
+
+> **Image slot · IMG-06 — Active context-user simulation.** [Specification](image-plan.md#img-06).
 
 ## Review basic role coverage at scale
 

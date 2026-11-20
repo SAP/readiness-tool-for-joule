@@ -1,4 +1,4 @@
-# 🏗️ Conceptual architecture and data flow
+# Conceptual architecture and data flow
 
 > **Documentation status:** This is a **high-level logical view**, assembled from the two supplied manuals and verified against the abapGit repository objects. It is **not** a complete class-level, CDS-level or API contract diagram. Further implementation-specific claims must be verified by inspecting the source code and consulting the project maintainers.
 

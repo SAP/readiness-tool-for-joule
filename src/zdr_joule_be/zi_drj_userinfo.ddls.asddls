@@ -1,6 +1,6 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.ignorePropagatedAnnotations: true
-@EndUserText.label: 'Fetch User Details for value help selection'
+@EndUserText.label: 'User Details - Value Help'
 
 define view entity ZI_DRJ_UserInfo
   as select from usr02 as UserLogon

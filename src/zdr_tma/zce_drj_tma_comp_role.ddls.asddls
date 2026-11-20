@@ -1,4 +1,4 @@
-@EndUserText.label: 'Target Mapping Analyzer - Composite Roles'
+@EndUserText.label: 'TM Analyzer - Composite Roles'
 @ObjectModel.query.implementedBy: 'ABAP:ZCL_DRJ_TMA_COMP_ROLE_QP'
 define custom entity ZCE_DRJ_TMA_COMP_ROLE
 {

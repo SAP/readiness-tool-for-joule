@@ -5,6 +5,9 @@
    <MASTER_LANGUAGE>E</MASTER_LANGUAGE>
    <STARTING_FOLDER>/src/</STARTING_FOLDER>
    <FOLDER_LOGIC>FULL</FOLDER_LOGIC>
+   <IGNORE>
+    <item>/src/zdr_joule_be/zapi_joulecapability_o2*</item>
+   </IGNORE>
   </DATA>
  </asx:values>
 </asx:abap>

@@ -171,12 +171,45 @@ CLASS zcl_drj_cra_bg_operation IMPLEMENTATION.
 
 
     "------------------------------------------------------------
+    " Generate ROW_HASH for missing requirements
+    " before entering bgPF SAVE phase
+    "------------------------------------------------------------
+
+    TRY.
+
+        LOOP AT lt_db_missing
+          ASSIGNING FIELD-SYMBOL(<ls_db_missing>).
+
+          <ls_db_missing>-row_hash =
+            zcl_drj_row_key=>for_cra_missing(
+              <ls_db_missing> ).
+
+        ENDLOOP.
+
+      CATCH cx_abap_message_digest.
+
+        "Hash generation failed.
+        "Do not persist incomplete missing records.
+
+        cl_abap_tx=>save( ).
+
+        UPDATE zdrj_cra_hdr
+          SET status = 'FAILED'
+          WHERE analysis_uuid = @mv_analysis_uuid.
+
+        RETURN.
+
+    ENDTRY.
+
+
+    "------------------------------------------------------------
     " 5. Enter bgPF SAVE phase
     "
     " From this point DB modifications are allowed.
     "------------------------------------------------------------
 
     cl_abap_tx=>save( ).
+
 
 
     "------------------------------------------------------------

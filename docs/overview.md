@@ -1,4 +1,4 @@
-# 🗺️ Tool overview
+# Product overview
 
 The **Readiness Inspection and Guidance Tool for Joule Scenarios** is a plug-in available through the SAP Fiori Launchpad (FLP) shell bar. It provides readiness and access information for Joule capabilities, their scenarios and the underlying system artefacts.
 
@@ -27,7 +27,6 @@ Both system-level activation and user-specific authorisation matter. The tool ma
 | --- | --- |
 | Capability | A high-level Joule function grouping one or more scenarios |
 | Scenario / use case | A specific Joule action within a capability; both terms are used interchangeably |
-| CAP-NNN / SCEN-NNNN | Tool-generated reference IDs assigned to capabilities and scenarios for internal handling and display. These do not correspond to any SAP Joule technical identifiers. |
 | API / OData service | A required backend service that must be active and appropriately authorised |
 | IBN target | A required SAP Fiori navigation intent, identified by semantic object and action |
 | Activation / readiness | Whether a required artefact is active on the SAP system |
@@ -43,6 +42,8 @@ Both system-level activation and user-specific authorisation matter. The tool ma
 | Green | Joule plug-in is detected in FLP and has initialised successfully |
 | Red | Joule plug-in is not detected or failed to initialise |
 
+> **Image slot · IMG-01 — FLP shell-bar launch/icon.** [Specification](image-plan.md#img-01).
+
 ### 2. Capability and scenario health
 
 | Status | Readiness | User access | Interpretation |
@@ -50,6 +51,8 @@ Both system-level activation and user-specific authorisation matter. The tool ma
 | **Green — Healthy** | Active | Authorised | Required artefacts are active and accessible |
 | **Yellow — Warning** | Active | Missing authorisation | At least one required API or IBN target lacks authorisation for the user |
 | **Red — Critical** | At least one artefact inactive | May also be missing | Activation issue takes precedence in the overall health status |
+
+> **Image slot · IMG-03 — Side-by-side health examples.** [Specification](image-plan.md#img-03).
 
 The health model is a diagnostic indication of prerequisite activation and access, not a functional end-to-end test. A capability becomes critical when at least one of its scenarios is critical.
 

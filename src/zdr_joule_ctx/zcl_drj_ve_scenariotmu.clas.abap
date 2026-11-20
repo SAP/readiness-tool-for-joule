@@ -24,7 +24,7 @@ CLASS zcl_drj_ve_scenariotmu DEFINITION
         semantic_object         TYPE sui_tm_mm_app-sem_obj,
         semantic_action         TYPE sui_tm_mm_app-sem_act,
         fiori_app_id            TYPE sui_tm_mm_app-fiori_id,
-        fiori_app_name          TYPE sui_tm_mm_appt-description,
+        fiori_app_name          TYPE sui_tm_mm_appt-tile_title,
         fiori_apps_library_link TYPE string,
       END OF ty_fiori_app_info.
 
@@ -348,7 +348,7 @@ CLASS zcl_drj_ve_scenariotmu IMPLEMENTATION.
         app~sem_obj     AS semantic_object,
         app~sem_act     AS semantic_action,
         app~fiori_id    AS fiori_app_id,
-        txt~description AS fiori_app_name
+        txt~tile_title  AS fiori_app_name
       FROM sui_tm_mm_app AS app
       LEFT OUTER JOIN sui_tm_mm_appt AS txt
         ON  txt~app_id = app~app_id

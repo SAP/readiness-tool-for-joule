@@ -1,4 +1,4 @@
-# 🔁 Reference data and synchronisation
+# Reference data and synchronisation
 
 The tool uses imported reference information to relate Joule capabilities/scenarios to prerequisites. Two upload functions in the user guide serve **different purposes**.
 
@@ -14,9 +14,13 @@ The guide identifies SAP Note **3523238** as the source for mappings of navigati
 
 The guide describes an import history showing timestamp, filename, rows, capability/scenario counts, user, status and detailed logs for the latest 20 imports.
 
+> **Image slot · IMG-12 — Sync page with import history.** [Specification](image-plan.md#img-12).
+
 ## Joule Admin Center — scenario visibility import
 
 This separate screen imports a Joule Admin Center export containing scenario **visibility-condition information**. After successful import, the guide says the results are grouped in a capability labelled **Joule Admin Center – Data**.
+
+> **Image slot · IMG-13 — Admin Center upload page.** [Specification](image-plan.md#img-13).
 
 **Do not confuse these data sets:** the Admin Center export helps describe whether scenarios are recognised/triggered for queries; it **does not replace or supplement** the API/IBN reference mapping from SAP Note 3523238 for readiness and authorisation analysis.
 

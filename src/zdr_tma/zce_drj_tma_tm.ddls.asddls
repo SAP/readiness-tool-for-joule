@@ -1,4 +1,4 @@
-@EndUserText.label: 'Target Mapping Analyzer - Target Mappings'
+@EndUserText.label: 'TM - Target Mappings'
 @ObjectModel.query.implementedBy: 'ABAP:ZCL_DRJ_TMA_TM_QP'
 define custom entity ZCE_DRJ_TMA_TM
 {

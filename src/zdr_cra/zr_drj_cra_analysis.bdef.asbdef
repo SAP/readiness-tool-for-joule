@@ -107,6 +107,7 @@ authorization dependent by _Analysis
   mapping for zdrj_cra_missing
     {
       AnalysisUUID     = analysis_uuid;
+      RowHash          = row_hash;
       RoleName         = role_name;
       CapabilityName   = capability_name;
       ScenarioName     = scenario_name;

@@ -4,12 +4,16 @@
 define view entity ZC_DRJ_CRA_Missing
   as projection on ZI_DRJ_CRA_Missing
 {
+
   key AnalysisUUID,
-  key RoleName,
-  key CapabilityName,
-  key ScenarioName,
-  key RequirementType,
-  key RequirementKey,
+  key RowHash,
+
+      RoleName,
+      CapabilityName,
+      ScenarioName,
+      RequirementType,
+      RequirementKey,
+
 
       ODataServiceName,
       APIVersion,

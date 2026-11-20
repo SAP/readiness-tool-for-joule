@@ -1,4 +1,4 @@
-# ⚠️ Scope, assumptions and limitations
+# Scope, assumptions and limitations
 
 The supplied manuals establish the following limits. Preserve them when extending this repository's documentation.
 
@@ -8,7 +8,7 @@ The supplied manuals establish the following limits. Preserve them when extendin
 - It provides **remediation guidance**, not automatic SAP configuration or role assignment.
 - **Context-user simulation** is read-only and does not change the system's settings.
 - **CRA** does not verify business, functional, organisational, application-specific or data-level authorisations.
-- **Background CRA mode** is experimental and documented as tested only on S/4HANA 2025, with specific bgPF/bgRFC prerequisites.
+- **Background CRA mode** is experimental and documented as tested only on S/4HANA 2023, with specific bgPF/bgRFC prerequisites.
 - **Joule Admin Center visibility imports** and **SAP Note 3523238 capability mappings** serve distinct purposes.
 - The supplied installation guide prohibits **production deployment** and calls for a sandbox/development system.
 - The Prompt Library documentation calls for validation of Joule licence and consumption conditions before use in productive environments.
@@ -25,12 +25,12 @@ The supplied manuals establish the following limits. Preserve them when extendin
 | Exact implementation details for Role Federation Comparison | The feature is mentioned but not documented in depth |
 | Upgrade/uninstall/rollback instructions | Not supplied |
 
-## ✅ Safe publication checklist
+## Safe publication checklist
 
 - [ ] Confirm the repository URL, branch and current code matches the supplied manuals.
 - [ ] Preserve the real licence, notices and contribution files already in the source repository.
 - [ ] Review screenshots for customer data, usernames, hostnames and secrets before committing.
-- [ ] Replace screenshot placeholders with approved high-resolution tool screenshots.
+- [ ] Replace screenshot placeholders with approved high-resolution product images.
 - [ ] Confirm version support and installation instructions with a developer/system owner.
 - [ ] Do not publish claims of SAP support, production-readiness or functional authorisation assurance unless approved.
 

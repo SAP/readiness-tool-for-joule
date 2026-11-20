@@ -176,8 +176,40 @@ CLASS lhc_analysis IMPLEMENTATION.
         et_missing = DATA(lt_cra_missing)
     ).
 
+    "------------------------------------------------------------
+    " Prepare missing requirements with deterministic ROW_HASH
+    "------------------------------------------------------------
+
+    DATA lt_missing_with_hash TYPE STANDARD TABLE OF zdrj_cra_missing
+      WITH EMPTY KEY.
+
+    lt_missing_with_hash = CORRESPONDING #( lt_cra_missing ).
+
+    TRY.
+
+        LOOP AT lt_missing_with_hash
+          ASSIGNING FIELD-SYMBOL(<ls_missing_hash>).
+
+          <ls_missing_hash>-row_hash =
+            zcl_drj_row_key=>for_cra_missing(
+              <ls_missing_hash> ).
+
+        ENDLOOP.
+
+      CATCH cx_abap_message_digest.
+
+        failed-analysis = VALUE #(
+          FOR ls_key IN keys
+          ( %tky = ls_key-%tky )
+        ).
+
+        RETURN.
+
+    ENDTRY.
+
     "Persist Role x Scenario analysis results
     MODIFY ENTITIES OF zr_drj_cra_analysis
+
       IN LOCAL MODE
 
       ENTITY analysis
@@ -223,6 +255,7 @@ CLASS lhc_analysis IMPLEMENTATION.
         CREATE BY \_missing
         AUTO FILL CID
         FIELDS (
+          rowhash
           rolename
           capabilityname
           scenarioname
@@ -241,8 +274,9 @@ CLASS lhc_analysis IMPLEMENTATION.
             %tky = key-%tky
 
             %target = VALUE #(
-              FOR ls_cra_missing IN lt_cra_missing
+              FOR ls_cra_missing IN lt_missing_with_hash
               (
+                rowhash           = ls_cra_missing-row_hash
                 rolename          = ls_cra_missing-role_name
                 capabilityname    = ls_cra_missing-capability_name
                 scenarioname      = ls_cra_missing-scenario_name
@@ -259,10 +293,11 @@ CLASS lhc_analysis IMPLEMENTATION.
         ).
 
     "Read the static Joule scenarios once
+
     SELECT capability_name,
-           scenario_name
-      FROM zdrj_cp_scenario
-      INTO TABLE @DATA(lt_scenarios).
+     scenario_name
+        FROM zdrj_cp_scenario
+        INTO TABLE @DATA(lt_scenarios).
 
     DATA(lv_scenario_count) = lines( lt_scenarios ).
     DATA(lv_result_count)   = lines( lt_cra_results ).

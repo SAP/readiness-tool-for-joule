@@ -7,7 +7,7 @@ CLASS zcl_drj_fdm_utility DEFINITION
   "
   " Central utility layer for Target Mapping resolution and
   " SAPUI5 / Web Dynpro dependency extraction using FDM, App Index
-  " and Service Info APIs.
+  " and release-compatible Service Utils APIs.
   "
   " TARGET MAPPING RESOLUTION
   "
@@ -74,25 +74,25 @@ CLASS zcl_drj_fdm_utility DEFINITION
   " │   ├─ /ui5/cl_ui5_app_api_factory
   " │   │   └─ get_app_index_instance
   " │   ├─ /ui5/if_ui5_app_index->get_ui5_app_info
-  " │   └─ /ui2/cl_service_info_factory
+  " │   └─ local MAKE_SERVICE helper
   " │       └─ resolve dependency URLs / IDs to service objects
   " │
   " ├─ get_single_tm_ui5_dependencies
   " │   └─ SAPUI5 Target Mapping
   " │       → component
   " │       → App Index dependencies
-  " │       → Service Info objects
+  " │       → release-independent service records
   " │
   " └─ get_multi_tm_ui5_dependencies
   "     └─ multiple SAPUI5 Target Mappings
   "         → unique components
   "         → App Index dependencies
-  "         → Service Info objects
+  "         → release-independent service records
   "
   " SAPUI5 DEPENDENCY FORMATTING
   "
   " ├─ get_ui5_dependency_details
-  " │   └─ service object
+  " │   └─ service record
   " │       ├─ type
   " │       ├─ service / group ID
   " │       ├─ version
@@ -129,8 +129,8 @@ CLASS zcl_drj_fdm_utility DEFINITION
   " ├─ get_single_tm_wda_dependencies
   " │   ├─ build /sap/bc/webdynpro/... URL
   " │   ├─ preserve system alias
-  " │   └─ /ui2/cl_service_info_factory
-  " │       └─ create WDA service object
+  " │   └─ local MAKE_SERVICE helper
+  " │       └─ create WDA service record
   " │
   " └─ get_multi_tm_wda_dependencies
   "     └─ same flow for multiple Web Dynpro Target Mappings
@@ -189,13 +189,25 @@ CLASS zcl_drj_fdm_utility DEFINITION
       tt_dependency_formatter TYPE STANDARD TABLE OF ty_dependency_formatter
         WITH EMPTY KEY.
 
+    " Independent service record shared by S/4HANA 2023 and 2025.
+    TYPES:
+      BEGIN OF ty_service,
+        url_type     TYPE c LENGTH 8,
+        pseudo_url   TYPE string,
+        url          TYPE string,
+        system_alias TYPE /ui2/fdm_runtime_system_alias,
+      END OF ty_service.
+    TYPES tt_service TYPE SORTED TABLE OF ty_service
+      WITH UNIQUE KEY url_type pseudo_url.
+
 *****Enhancement to support multiple services.
     TYPES:
       BEGIN OF ty_service_v2,
         service_seqno TYPE i,
-        url_type      TYPE /ui2/cl_service_info=>tv_service_type,
+        url_type      TYPE c LENGTH 8,
         pseudo_url    TYPE string,
-        service_obj   TYPE REF TO /ui2/if_service_info,
+        url           TYPE string,
+        system_alias  TYPE /ui2/fdm_runtime_system_alias,
       END OF ty_service_v2.
 
     TYPES:
@@ -274,42 +286,42 @@ CLASS zcl_drj_fdm_utility DEFINITION
       IMPORTING
         iv_component       TYPE /ui5/app_index_component_id
       RETURNING
-        VALUE(rt_services) TYPE /ui2/cl_service_info=>tt_service.
+        VALUE(rt_services) TYPE tt_service.
 
     CLASS-METHODS get_multi_comp_ui5_dep
       IMPORTING
         it_components      TYPE /ui5/app_index_component_id_t
       RETURNING
-        VALUE(rt_services) TYPE /ui2/cl_service_info=>tt_service.
+        VALUE(rt_services) TYPE tt_service.
 
     CLASS-METHODS get_single_tm_ui5_dependencies
       IMPORTING
         it_target_mapping  TYPE /ui2/if_fdm=>ts_tm
       RETURNING
-        VALUE(rt_services) TYPE /ui2/cl_service_info=>tt_service.
+        VALUE(rt_services) TYPE tt_service.
 
     CLASS-METHODS get_multi_tm_ui5_dependencies
       IMPORTING
         it_target_mappings TYPE /ui2/if_fdm=>tt_tm_sorted
       RETURNING
-        VALUE(rt_services) TYPE /ui2/cl_service_info=>tt_service.
+        VALUE(rt_services) TYPE tt_service.
 
     CLASS-METHODS get_single_tm_wda_dependencies
       IMPORTING
         it_target_mapping  TYPE /ui2/if_fdm=>ts_tm
       RETURNING
-        VALUE(rt_services) TYPE /ui2/cl_service_info=>tt_service.
+        VALUE(rt_services) TYPE tt_service.
 
     CLASS-METHODS get_multi_tm_wda_dependencies
       IMPORTING
         it_target_mappings TYPE /ui2/if_fdm=>tt_tm_sorted
       RETURNING
-        VALUE(rt_services) TYPE /ui2/cl_service_info=>tt_service.
+        VALUE(rt_services) TYPE tt_service.
 
 
     CLASS-METHODS get_ui5_dependency_details
       IMPORTING
-        it_services    TYPE /ui2/cl_service_info=>tt_service
+        it_services    TYPE tt_service
       RETURNING
         VALUE(rt_info) TYPE tt_dependency_formatter.
 
@@ -375,11 +387,27 @@ CLASS zcl_drj_fdm_utility DEFINITION
       RETURNING
         VALUE(ro_catalog_items)
           TYPE REF TO /ui2/if_fdm_catalog_items.
+
+    CLASS-METHODS make_service
+      IMPORTING
+        iv_url          TYPE string
+        iv_system_alias TYPE /ui2/fdm_runtime_system_alias OPTIONAL
+      RETURNING
+        VALUE(rs_service) TYPE ty_service.
+
+    CLASS-METHODS format_service_from_url
+      IMPORTING
+        iv_service_type TYPE ty_service-url_type
+        iv_url          TYPE string
+      RETURNING
+        VALUE(rs_info) TYPE ty_dependency_formatter.
 ENDCLASS.
 
 
 
 CLASS zcl_drj_fdm_utility IMPLEMENTATION.
+
+
   METHOD get_tm_app_info.
 
     "Deprecated compatibility method.
@@ -504,6 +532,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
     ENDTRY.
 
   ENDMETHOD.
+
 
   METHOD get_all_tm_apps_info.
     DATA:
@@ -726,6 +755,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_component_ui5_dependencies.
 
     DATA lt_components TYPE /ui5/app_index_component_id_t.
@@ -738,11 +768,12 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_multi_comp_ui5_dep.
 
     DATA:
       lo_app_index       TYPE REF TO /ui5/if_ui5_app_index,
-      lo_service_factory TYPE REF TO /ui2/if_service_info_factory,
+
       lt_components      TYPE /ui5/app_index_component_id_t,
       lt_ui5_app_info    TYPE /ui5/app_index_ui5_info_t,
       lv_url             TYPE string.
@@ -765,9 +796,6 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 *--------------------------------------------------------------------
     lo_app_index =
       /ui5/cl_ui5_app_api_factory=>get_app_index_instance( ).
-
-    lo_service_factory =
-      NEW /ui2/cl_service_info_factory( ).
 
 *--------------------------------------------------------------------
 * Read UI5 App Index
@@ -792,9 +820,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
           lv_url = <ls_dep>-url.
 
-          INSERT lo_service_factory->get_instance_by_url(
-                    iv_url = lv_url
-                 )->get_me_as_service_struct( )
+          INSERT make_service( iv_url = lv_url )
             INTO TABLE rt_services.
 
         ENDIF.
@@ -804,9 +830,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
           lv_url = CONV string( <ls_dep>-id ).
 
-          INSERT lo_service_factory->get_instance_by_url(
-                    iv_url = lv_url
-                 )->get_me_as_service_struct( )
+          INSERT make_service( iv_url = lv_url )
             INTO TABLE rt_services.
 
         ENDIF.
@@ -822,7 +846,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
     DATA:
       lo_app_index       TYPE REF TO /ui5/if_ui5_app_index,
-      lo_service_factory TYPE REF TO /ui2/if_service_info_factory,
+
       lt_components      TYPE /ui5/app_index_component_id_t,
       lt_ui5_app_info    TYPE /ui5/app_index_ui5_info_t,
       lv_url             TYPE string.
@@ -838,9 +862,6 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
     lo_app_index =
       /ui5/cl_ui5_app_api_factory=>get_app_index_instance( ).
-
-    lo_service_factory =
-      NEW /ui2/cl_service_info_factory( ).
 
     "--------------------------------------------------------
     " Read UI5 App Index
@@ -871,9 +892,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
         lv_url = <ls_dep>-url.
 
-        INSERT lo_service_factory->get_instance_by_url(
-                  iv_url = lv_url
-               )->get_me_as_service_struct( )
+        INSERT make_service( iv_url = lv_url )
           INTO TABLE rt_services.
 
       ENDIF.
@@ -883,9 +902,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
         lv_url = CONV string( <ls_dep>-id ).
 
-        INSERT lo_service_factory->get_instance_by_url(
-                  iv_url = lv_url
-               )->get_me_as_service_struct( )
+        INSERT make_service( iv_url = lv_url )
           INTO TABLE rt_services.
 
       ENDIF.
@@ -894,20 +911,18 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_multi_tm_ui5_dependencies.
 
     DATA:
       lo_app_index       TYPE REF TO /ui5/if_ui5_app_index,
-      lo_service_factory TYPE REF TO /ui2/if_service_info_factory,
+
       lt_components      TYPE /ui5/app_index_component_id_t,
       lt_ui5_app_info    TYPE /ui5/app_index_ui5_info_t,
       lv_url             TYPE string.
 
     lo_app_index =
       /ui5/cl_ui5_app_api_factory=>get_app_index_instance( ).
-
-    lo_service_factory =
-      NEW /ui2/cl_service_info_factory( ).
 
     "--------------------------------------------------------
     " Collect UI5 Components
@@ -956,9 +971,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
           lv_url = <ls_dep>-url.
 
-          INSERT lo_service_factory->get_instance_by_url(
-                    iv_url = lv_url
-                 )->get_me_as_service_struct( )
+          INSERT make_service( iv_url = lv_url )
             INTO TABLE rt_services.
 
         ENDIF.
@@ -968,9 +981,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
           lv_url = CONV string( <ls_dep>-id ).
 
-          INSERT lo_service_factory->get_instance_by_url(
-                    iv_url = lv_url
-                 )->get_me_as_service_struct( )
+          INSERT make_service( iv_url = lv_url )
             INTO TABLE rt_services.
 
         ENDIF.
@@ -981,16 +992,14 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_single_tm_wda_dependencies.
 
     DATA:
-      lo_service_factory TYPE REF TO /ui2/if_service_info_factory,
+
       lv_url             TYPE string,
       lv_system_alias    TYPE /ui2/fdm_runtime_system_alias,
-      ls_service         TYPE /ui2/cl_service_info=>ts_service.
-
-    lo_service_factory =
-      NEW /ui2/cl_service_info_factory( ).
+      ls_service         TYPE ty_service.
 
     CHECK it_target_mapping-application-type =
             /ui2/if_fdm=>gc_app_type-web_dynpro.
@@ -1028,25 +1037,20 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 * Create Service Object
 *------------------------------------------------------------------
     ls_service =
-      lo_service_factory->get_instance_by_url(
-        iv_sys_alias = lv_system_alias
-        iv_url       = lv_url
-      )->get_me_as_service_struct( ).
+      make_service( iv_url = lv_url iv_system_alias = lv_system_alias ).
 
     INSERT ls_service INTO TABLE rt_services.
 
   ENDMETHOD.
 
+
   METHOD get_multi_tm_wda_dependencies.
 
     DATA:
-      lo_service_factory TYPE REF TO /ui2/if_service_info_factory,
+
       lv_url             TYPE string,
       lv_system_alias    TYPE /ui2/fdm_runtime_system_alias,
-      ls_service         TYPE /ui2/cl_service_info=>ts_service.
-
-    lo_service_factory =
-      NEW /ui2/cl_service_info_factory( ).
+      ls_service         TYPE ty_service.
 
     LOOP AT it_target_mappings ASSIGNING FIELD-SYMBOL(<ls_tm>)
       WHERE application-type = /ui2/if_fdm=>gc_app_type-web_dynpro.
@@ -1083,10 +1087,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 * Create Service Object
 *------------------------------------------------------------------
       ls_service =
-        lo_service_factory->get_instance_by_url(
-          iv_sys_alias = lv_system_alias
-          iv_url       = lv_url
-        )->get_me_as_service_struct( ).
+        make_service( iv_url = lv_url iv_system_alias = lv_system_alias ).
 
       INSERT ls_service INTO TABLE rt_services.
 
@@ -1094,91 +1095,16 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_ui5_dependency_details.
-
-    DATA:
-      ls_info TYPE ty_dependency_formatter.
-
-    FIELD-SYMBOLS:
-      <ls_service> TYPE /ui2/cl_service_info=>ts_service.
-
-    LOOP AT it_services ASSIGNING <ls_service>.
-
-      CLEAR ls_info.
-
-*--------------------------------------------------------------------
-* Generic Service Interface
-*--------------------------------------------------------------------
-      DATA(lo_service) = <ls_service>-service_obj.
-
-      CHECK lo_service IS BOUND.
-
-*--------------------------------------------------------------------
-* Type
-*--------------------------------------------------------------------
-      ls_info-app_type =
-        lo_service->get_type( ).
-
-*--------------------------------------------------------------------
-* Service Name
-*
-* Examples:
-*   CATALOGSERVICE
-*   /IWFND/CATALOGSERVICE
-*   C_SALESORDERMANAGE_SD
-*   C_SALESORDERMANAGE_SRV   (ODATA V4 Group ID)
-*   ATP_CHARTS1
-*--------------------------------------------------------------------
-
-      CASE ls_info-app_type.
-
-        WHEN 'ODATA4'.
-
-          TRY.
-
-              DATA(lo_v4_service) =
-                CAST /ui2/if_odata_v4_service_info( lo_service ).
-
-              ls_info-service_name =
-                lo_v4_service->get_service_group_id(
-                  iv_with_non_sap_namespace = abap_true ).
-
-            CATCH cx_sy_move_cast_error.
-
-              ls_info-service_name =
-                lo_service->get_service_id(
-                  iv_with_non_sap_namespace = abap_true ).
-
-          ENDTRY.
-
-        WHEN OTHERS.
-
-          ls_info-service_name =
-            lo_service->get_service_id(
-              iv_with_non_sap_namespace = abap_true ).
-
-      ENDCASE.
-
-*--------------------------------------------------------------------
-* Version
-*--------------------------------------------------------------------
-      ls_info-service_version =
-        lo_service->get_service_version( ).
-
-*--------------------------------------------------------------------
-* URL
-*--------------------------------------------------------------------
-      ls_info-url =
-        lo_service->get_url( ).
-
-*--------------------------------------------------------------------
-* Add Row
-*--------------------------------------------------------------------
+    LOOP AT it_services ASSIGNING FIELD-SYMBOL(<ls_service>).
+      DATA(ls_info) = format_service_from_url(
+        iv_service_type = <ls_service>-url_type
+        iv_url          = <ls_service>-url ).
       APPEND ls_info TO rt_info.
-
     ENDLOOP.
-
   ENDMETHOD.
+
 
   METHOD get_main_ui5_service.
 
@@ -1246,6 +1172,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_main_wda_service.
 
     CLEAR rs_service.
@@ -1274,9 +1201,10 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_ui5_comp_dep_details.
 
-    DATA lt_services TYPE /ui2/cl_service_info=>tt_service.
+    DATA lt_services TYPE tt_service.
 
 *--------------------------------------------------------------------
 * Resolve dependencies
@@ -1293,6 +1221,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
         it_services = lt_services ).
 
   ENDMETHOD.
+
 
   METHOD get_ui5_comp_dep_details_v2.
 
@@ -1317,9 +1246,10 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_ui5_mult_comp_dep_details.
 
-    DATA lt_services TYPE /ui2/cl_service_info=>tt_service.
+    DATA lt_services TYPE tt_service.
 
 *--------------------------------------------------------------------
 * Resolve dependencies
@@ -1338,7 +1268,6 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
   ENDMETHOD.
 
 
-
   METHOD get_tm_app_info_first.
 
     DATA(lt_info) =
@@ -1352,6 +1281,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
       INDEX 1.
 
   ENDMETHOD.
+
 
   METHOD get_tm_app_info_sapgui.
 
@@ -1378,6 +1308,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_tm_app_info_ui5.
 
     DATA(lt_info) =
@@ -1402,6 +1333,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
     rs_info-status_text = 'No SAPUI5 Target Mapping found'.
 
   ENDMETHOD.
+
 
   METHOD get_tm_app_info_wda.
 
@@ -1428,6 +1360,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_fdm_catalog_cache.
 
     IF mo_fdm_catalog_items IS NOT BOUND.
@@ -1451,16 +1384,17 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_multicomp_ui5dep_v2.
 
     DATA:
       lo_app_index       TYPE REF TO /ui5/if_ui5_app_index,
-      lo_service_factory TYPE REF TO /ui2/if_service_info_factory,
+
       lt_components      TYPE /ui5/app_index_component_id_t,
       lt_ui5_app_info    TYPE /ui5/app_index_ui5_info_t,
       lv_url             TYPE string,
       lv_service_seqno   TYPE i,
-      ls_service_std     TYPE /ui2/cl_service_info=>ts_service,
+      ls_service_std     TYPE ty_service,
       ls_service_v2      TYPE ty_service_v2.
 
 *--------------------------------------------------------------------
@@ -1481,9 +1415,6 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 *--------------------------------------------------------------------
     lo_app_index =
       /ui5/cl_ui5_app_api_factory=>get_app_index_instance( ).
-
-    lo_service_factory =
-      NEW /ui2/cl_service_info_factory( ).
 
 *--------------------------------------------------------------------
 * Read UI5 App Index
@@ -1511,9 +1442,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
           CLEAR ls_service_std.
 
           ls_service_std =
-            lo_service_factory->get_instance_by_url(
-              iv_url = lv_url
-            )->get_me_as_service_struct( ).
+            make_service( iv_url = lv_url ).
 
           lv_service_seqno = lv_service_seqno + 1.
 
@@ -1522,7 +1451,8 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
           ls_service_v2-service_seqno = lv_service_seqno.
           ls_service_v2-url_type      = ls_service_std-url_type.
           ls_service_v2-pseudo_url    = ls_service_std-pseudo_url.
-          ls_service_v2-service_obj   = ls_service_std-service_obj.
+          ls_service_v2-url           = ls_service_std-url.
+          ls_service_v2-system_alias  = ls_service_std-system_alias.
 
           APPEND ls_service_v2 TO rt_services.
 
@@ -1536,9 +1466,7 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
           CLEAR ls_service_std.
 
           ls_service_std =
-            lo_service_factory->get_instance_by_url(
-              iv_url = lv_url
-            )->get_me_as_service_struct( ).
+            make_service( iv_url = lv_url ).
 
           lv_service_seqno = lv_service_seqno + 1.
 
@@ -1547,7 +1475,8 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
           ls_service_v2-service_seqno = lv_service_seqno.
           ls_service_v2-url_type      = ls_service_std-url_type.
           ls_service_v2-pseudo_url    = ls_service_std-pseudo_url.
-          ls_service_v2-service_obj   = ls_service_std-service_obj.
+          ls_service_v2-url           = ls_service_std-url.
+          ls_service_v2-system_alias  = ls_service_std-system_alias.
 
           APPEND ls_service_v2 TO rt_services.
 
@@ -1559,95 +1488,21 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD get_ui5_dependency_details_v2.
-
-    DATA:
-      ls_info TYPE ty_dependency_formatter_v2.
-
-    FIELD-SYMBOLS:
-      <ls_service> TYPE ty_service_v2.
-
-    LOOP AT it_services ASSIGNING <ls_service>.
-
-      CLEAR ls_info.
-
-*--------------------------------------------------------------------
-* Generic Service Interface
-*--------------------------------------------------------------------
-      DATA(lo_service) = <ls_service>-service_obj.
-
-      CHECK lo_service IS BOUND.
-
-*--------------------------------------------------------------------
-* Sequence Number
-*--------------------------------------------------------------------
-      ls_info-service_seqno =
-        <ls_service>-service_seqno.
-
-*--------------------------------------------------------------------
-* Type
-*--------------------------------------------------------------------
-      ls_info-app_type =
-        lo_service->get_type( ).
-
-*--------------------------------------------------------------------
-* Service Name
-*
-* Examples:
-*   CATALOGSERVICE
-*   /IWFND/CATALOGSERVICE
-*   C_SALESORDERMANAGE_SD
-*   C_SALESORDERMANAGE_SRV   " ODATA V4 Group ID
-*--------------------------------------------------------------------
-      CASE ls_info-app_type.
-
-        WHEN 'ODATA4'.
-
-          TRY.
-
-              DATA(lo_v4_service) =
-                CAST /ui2/if_odata_v4_service_info( lo_service ).
-
-              ls_info-service_name =
-                lo_v4_service->get_service_group_id(
-                  iv_with_non_sap_namespace = abap_true ).
-
-            CATCH cx_sy_move_cast_error.
-
-              ls_info-service_name =
-                lo_service->get_service_id(
-                  iv_with_non_sap_namespace = abap_true ).
-
-          ENDTRY.
-
-        WHEN OTHERS.
-
-          ls_info-service_name =
-            lo_service->get_service_id(
-              iv_with_non_sap_namespace = abap_true ).
-
-      ENDCASE.
-
-*--------------------------------------------------------------------
-* Version
-*--------------------------------------------------------------------
-      ls_info-service_version =
-        lo_service->get_service_version( ).
-
-*--------------------------------------------------------------------
-* URL
-*--------------------------------------------------------------------
-      ls_info-url =
-        lo_service->get_url( ).
-
-*--------------------------------------------------------------------
-* Add Row
-*--------------------------------------------------------------------
-      APPEND ls_info TO rt_info.
-
+    LOOP AT it_services ASSIGNING FIELD-SYMBOL(<ls_service>).
+      DATA(ls_base) = format_service_from_url(
+        iv_service_type = <ls_service>-url_type
+        iv_url          = <ls_service>-url ).
+      APPEND VALUE ty_dependency_formatter_v2(
+        service_seqno   = <ls_service>-service_seqno
+        app_type        = ls_base-app_type
+        service_name    = ls_base-service_name
+        service_version = ls_base-service_version
+        url             = ls_base-url ) TO rt_info.
     ENDLOOP.
-
   ENDMETHOD.
+
 
   METHOD get_ui5_multcomp_dep_det_v2.
     DATA lt_services TYPE tt_service_v2.
@@ -1668,4 +1523,71 @@ CLASS zcl_drj_fdm_utility IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD make_service.
+    rs_service-url = iv_url.
+    rs_service-system_alias = iv_system_alias.
+    rs_service-pseudo_url = to_lower( iv_url ).
+
+    rs_service-url_type = /ui2/cl_service_utils=>guess_service_type_by_url(
+      iv_url = iv_url ).
+
+    " The common URL utility identifies OData, HTTP, APC and INA.
+    " It does not classify UI5 repository IDs or Web Dynpro paths.
+    IF rs_service-url_type IS INITIAL
+       OR rs_service-url_type = 'UNKNOWN'.
+      IF iv_url CS '/sap/bc/webdynpro/'.
+        rs_service-url_type = 'WDA'.
+      ELSEIF iv_url CS '/sap/bc/ui5_ui5/'
+          OR iv_url CP 'sap/*'.
+        rs_service-url_type = 'UI5'.
+      ELSEIF iv_url CS '/sap/bc/'.
+        rs_service-url_type = 'ICF'.
+      ELSE.
+        rs_service-url_type = 'UNKNOWN'.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD format_service_from_url.
+    rs_info-app_type = iv_service_type.
+    rs_info-url = iv_url.
+
+    CASE iv_service_type.
+      WHEN 'ODATA4'.
+        TRY.
+            DATA lv_v4_group TYPE /iwbep/v4_med_group_id.
+            DATA lv_v4_version TYPE /iwbep/v4_med_service_version.
+            /ui2/cl_service_utils=>parse_odata_v4_url(
+              EXPORTING iv_url = iv_url
+              IMPORTING ev_service_group_id  = lv_v4_group
+                        ev_service_version   = lv_v4_version ).
+            rs_info-service_name = lv_v4_group.
+            rs_info-service_version = lv_v4_version.
+          CATCH /ui2/cx_service_utils.
+            " Leave name/version initial if the URL cannot be parsed.
+        ENDTRY.
+      WHEN 'ODATA'.
+        TRY.
+            DATA lv_v2_name TYPE /iwfnd/med_mdl_service_grp_id.
+            DATA lv_v2_namespace TYPE /iwfnd/med_mdl_namespace.
+            DATA lv_v2_version TYPE /iwfnd/med_mdl_version.
+            /ui2/cl_service_utils=>parse_odata_v2_url(
+              EXPORTING iv_url = iv_url
+              IMPORTING ev_ext_service_name = lv_v2_name
+                        ev_namespace        = lv_v2_namespace
+                        ev_version          = lv_v2_version ).
+            rs_info-service_name = |{ lv_v2_namespace }{ lv_v2_name }|.
+            rs_info-service_version = lv_v2_version.
+          CATCH /ui2/cx_service_utils.
+            " Leave name/version initial if the URL cannot be parsed.
+        ENDTRY.
+      WHEN 'UI5' OR 'WDA' OR 'HTTP' OR 'ICF' OR 'INA' OR 'APC'.
+        " Non-OData service naming needs a separate parity check.
+        " Keep the original URL visible instead of inventing an ID.
+        rs_info-service_name = iv_url.
+      WHEN OTHERS.
+        rs_info-service_name = iv_url.
+    ENDCASE.
+  ENDMETHOD.
 ENDCLASS.
+

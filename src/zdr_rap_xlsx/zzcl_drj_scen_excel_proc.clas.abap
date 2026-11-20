@@ -642,18 +642,46 @@ CLASS zzcl_drj_scen_excel_proc IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD persist_data.
 
     " ------------------------------------------------------------
-    " Full replacement of Joule reference data,
-    " same behaviour as the existing Excel importer.
+    " Prepare Target Mappings with ROW_HASH before DB deletion
     " ------------------------------------------------------------
+
+    DATA lt_tms_hashed TYPE tt_tms.
+
+    lt_tms_hashed = it_tms.
+
+    TRY.
+
+        LOOP AT lt_tms_hashed
+          ASSIGNING FIELD-SYMBOL(<ls_tm_hashed>).
+
+          <ls_tm_hashed>-row_hash =
+            zcl_drj_row_key=>for_scen_tm(
+              <ls_tm_hashed> ).
+
+        ENDLOOP.
+
+      CATCH cx_abap_message_digest.
+
+        "Do not delete existing records if hashing fails.
+        RETURN.
+
+    ENDTRY.
+
+  " ------------------------------------------------------------
+  " Replace ONLY Joule Admin Center reference data
+  " Preserve all other capabilities and scenarios
+  " ------------------------------------------------------------
 
     DELETE FROM zdrj_capability.
     DELETE FROM zdrj_cap_brole.
     DELETE FROM zdrj_cp_scenario.
     DELETE FROM zdrj_scen_api.
     DELETE FROM zdrj_scen_tm.
+
 
 
     " Create the single dummy capability for Admin Center scenarios
@@ -673,13 +701,14 @@ CLASS zzcl_drj_scen_excel_proc IMPLEMENTATION.
     ENDIF.
 
 
-    IF it_tms IS NOT INITIAL.
+
+    IF lt_tms_hashed IS NOT INITIAL.
 
       INSERT zdrj_scen_tm
-        FROM TABLE @it_tms.
+        FROM TABLE @lt_tms_hashed.
 
     ENDIF.
 
   ENDMETHOD.
-
 ENDCLASS.
+
